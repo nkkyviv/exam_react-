@@ -1,10 +1,13 @@
 import { useParams } from "react-router-dom";
 import useFetch from "../hooks/UseFetch";
 import { useState } from "react";
+import { useCart } from "../context/CartContext";
 
 export default function ProductPage() {
 
   const { id } = useParams();
+
+  const{addItem} = useCart();
 
   const { data: product, loading, error } = useFetch(
     `https://developerapis.vercel.app/api/products/${id}`
@@ -99,6 +102,16 @@ export default function ProductPage() {
             alert("Please select a size");
             return;
           }
+
+          addItem({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            image: product.image,
+            color: selectedColor?.color,
+            size: selectedSize?.size,
+            quantity,
+          });
 
           alert("Added to cart!");
         }}
